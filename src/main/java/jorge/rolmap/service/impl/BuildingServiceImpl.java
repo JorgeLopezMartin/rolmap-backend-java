@@ -1,8 +1,10 @@
 package jorge.rolmap.service.impl;
 
 import jorge.rolmap.model.Building;
+import jorge.rolmap.model.Place;
 import jorge.rolmap.repository.BuildingRepository;
 import jorge.rolmap.service.BuildingService;
+import jorge.rolmap.service.PlaceService;
 import jorge.rolmap.util.constants.BuildingType;
 import jorge.rolmap.util.exception.InstanceNotFoundException;
 import jorge.rolmap.util.exception.InvalidArgumentException;
@@ -18,6 +20,8 @@ public class BuildingServiceImpl implements BuildingService {
 
     @Autowired
     BuildingRepository buildingRepository;
+    @Autowired
+    PlaceService placeService;
 
     private void validateBuildingParams(String name, String description, String mapUrl, BuildingType buildingType) throws InvalidArgumentException {
         if (name == null || name.isEmpty()) {
@@ -25,9 +29,6 @@ public class BuildingServiceImpl implements BuildingService {
         }
         if (description == null || description.isEmpty()) {
             throw new InvalidArgumentException("Invalid description.");
-        }
-        if (mapUrl == null || mapUrl.isEmpty()) {
-            throw new InvalidArgumentException("Invalid map url.");
         }
         if (buildingType == null) {
             throw new InvalidArgumentException("Invalid building type.");
@@ -40,13 +41,15 @@ public class BuildingServiceImpl implements BuildingService {
     }
 
     @Override
-    public Building createBuilding(String name, String description, String mapUrl, BuildingType buildingType) throws InvalidArgumentException {
+    public Building createBuilding(String name, String description, String mapUrl, BuildingType buildingType, Integer placeId) throws InstanceNotFoundException, InvalidArgumentException {
         this.validateBuildingParams(name, description, mapUrl, buildingType);
+        Place place = placeService.getPlace(placeId);
         Building building = new Building();
         building.setName(name);
         building.setDescription(description);
         building.setMapUrl(mapUrl);
         building.setBuildingType(buildingType);
+        building.setPlace(place);
         buildingRepository.save(building);
         return building;
     }

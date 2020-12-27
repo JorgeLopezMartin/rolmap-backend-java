@@ -6,14 +6,18 @@ import org.springframework.stereotype.Component;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 
-@Component
 public class BuildingPost {
 
-    @NotEmpty String name;
-    @NotEmpty String description;
+    @NotEmpty
+    String name;
+    @NotEmpty
+    String description;
     String mapUrl;
-    @NotNull BuildingType buildingType;
-    @NotNull Integer placeId;
+    @NotNull
+    BuildingType buildingType;
+
+    @NotNull
+    Integer placeId;
 
     public BuildingPost() {
     }

@@ -10,6 +10,7 @@ import java.util.List;
 public interface PlaceService {
 
     List<Place> getPlaces();
+    Place getPlace(Integer id) throws InstanceNotFoundException;
     Place createPlace(String name, String description, String mapUrl, PlaceType placeType, Integer squareId) throws InvalidArgumentException, InstanceNotFoundException;
     Place updatePlace (Integer id, String name, String description, String mapUrl, PlaceType placeType) throws InstanceNotFoundException, InvalidArgumentException;
     void deletePlace (Integer id) throws InstanceNotFoundException;

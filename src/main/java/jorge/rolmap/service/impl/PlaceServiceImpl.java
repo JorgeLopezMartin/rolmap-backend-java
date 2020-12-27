@@ -41,6 +41,16 @@ public class PlaceServiceImpl implements PlaceService {
     }
 
     @Override
+    public Place getPlace(Integer id) throws InstanceNotFoundException {
+        Optional<Place> foundPlace = placeRepository.findById(id);
+        if (foundPlace.isPresent()) {
+            return foundPlace.get();
+        } else {
+            throw new InstanceNotFoundException("Place " +id);
+        }
+    }
+
+    @Override
     public Place createPlace(String name, String description, String mapUrl, PlaceType placeType, Integer squareId) throws InvalidArgumentException, InstanceNotFoundException {
         this.validatePlaceParams(name, description, mapUrl, placeType);
         Place place = new Place();

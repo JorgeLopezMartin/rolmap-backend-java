@@ -33,7 +33,7 @@ public class BuildingController {
      * Finds all buildings if the user has permissions needed
      * @return square list with status code
      */
-    @GetMapping("")
+    @GetMapping(value= "", produces = "application/json")
     @ApiOperation(value="Find all buildings", notes = "Building reading permission is needed.", response = Building[].class)
     @ApiResponses(value = { @ApiResponse(code = 200, message = "Buildings retrieved successfully"),
             @ApiResponse(code = 401, message = "Authentication required"),
@@ -63,8 +63,10 @@ public class BuildingController {
             return this.validationErrorHandler(bindingResult);
         }
         try {
-            Building building = buildingService.createBuilding(buildingPost.getName(), buildingPost.getDescription(), buildingPost.getMapUrl(), buildingPost.getBuildingType());
+            Building building = buildingService.createBuilding(buildingPost.getName(), buildingPost.getDescription(), buildingPost.getMapUrl(), buildingPost.getBuildingType(), buildingPost.getPlaceId());
             return ResponseEntity.status(HttpStatus.CREATED).body(new Gson().toJson(building));
+        } catch(InstanceNotFoundException e) {
+            return new ResponseEntity<String>(ControllerUtils.parseError(e), HttpStatus.NOT_FOUND);
         } catch (InvalidArgumentException e) {
             return new ResponseEntity<String>(ControllerUtils.parseError(e), HttpStatus.BAD_REQUEST);
         }
